@@ -11,6 +11,8 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
     data.table,
-    mlr3superlearner (>= 0.1.0)
+    mlr3superlearner (>= 0.1.0),
+    drcde
 Remotes: 
-    nt-williams
+    nt-williams,
+    CI-NYC
