@@ -9,5 +9,7 @@ ps <- function(data, A, W, .control) {
 
     out[, "P(1|W)"] <- predict(fit, data)
     out[, "P(0|W)"] <- 1 - out[, "P(1|W)"]
-    out
+
+    list(pred = out,
+         fit = fit)
 }
