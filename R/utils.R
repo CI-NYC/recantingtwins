@@ -35,3 +35,5 @@ draw_H <- function(hs, p) {
 
     lapply(hs, .f)
 }
+
+gl <- glue::glue

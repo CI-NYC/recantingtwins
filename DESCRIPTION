@@ -18,4 +18,5 @@ Remotes:
     nt-williams,
     CI-NYC
 Imports: 
+    glue,
     schoolmath

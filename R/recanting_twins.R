@@ -17,4 +17,6 @@ recanting_twins <- function(data, W, A, Z, M, Y,
     fit_pmz <- pmz(data, A, W, M, Z, .control)
     # Estimate E_h(E(Y|a*, Z, M, W)*P(M,Z|a',W))
     Eh_theta1 <- theta1_integral(data, A, Z, M, fit_or, fit_pmz, ap = 1, as = 0)
+    # Estimate the EIF for theta 1
+    est_theta1 <- If_theta1(data, A, Y, fit_ps$pred, fit_or$pred, fit_pmz$pred, Eh_theta1, ap = 1, as = 0)
 }
