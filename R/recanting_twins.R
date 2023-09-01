@@ -23,6 +23,10 @@ recanting_twins <- function(data, W, A, Z, M, Y,
 
     # theta' 1 ----------------------------------------------------------------
     # Fit the density of Z: P(Z|a,W)
-    fit_pz <- pm(data, A, W, Z, .control)
+    fit_pz <- pz(data, A, W, Z, .control)
+    # Fit the density of M conditional on A,W: P(M|a,W)
+    fit_pm1 <- pm1(data, A, W, M, .control)
+    # Fit the density of M conditional on A,Z,W: P(M|a,Z,W)
+    fit_pm2 <- pm2(data, A, W, M, Z, .control)
 
 }
