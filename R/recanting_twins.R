@@ -1,13 +1,20 @@
 recanting_twins <- function(data, W, A, Z, M, Y,
                             outcome_type = c("binomial", "continuous"),
-                            .control = rt_options()) {
+                            .control = rt_control()) {
     data <- copy(data)
     setDT(data)
 
     outcome_type <- match.arg(outcome_type)
 
     # Fit the propensity score: P(A | W)
-    ps(data, W, W, .control)
+    fit_ps <- ps(data, W, A, .control)
     # Fit the outcome regression: E(Y|A, Z, M, W)
-    or(data, W, A, Z, M, Y, outcome_type, .control)
+    fit_or <- or(data, W, A, Z, M, Y, outcome_type, .control)
+
+    # theta 1 -----------------------------------------------------------------
+
+    # Fit the joint density of M,Z: P(M,Z|a,W)
+    fit_pmz <- pmz(data, A, W, M, Z, .control)
+    # Estimate E_h(E(Y|a*, Z, M, W)*P(M,Z|a',W))
+    Eh_theta1 <- theta1_integral(data, A, Z, M, fit_or, fit_pmz, ap = 1, as = 0)
 }

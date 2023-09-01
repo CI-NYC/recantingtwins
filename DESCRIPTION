@@ -12,7 +12,10 @@ LazyData: true
 Depends: 
     data.table,
     mlr3superlearner (>= 0.1.0),
-    drcde
+    drcde,
+    doFuture
 Remotes: 
     nt-williams,
     CI-NYC
+Imports: 
+    schoolmath
