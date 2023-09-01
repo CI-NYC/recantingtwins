@@ -4,5 +4,7 @@ rt_control <- function() {
          .m_learners = c("mean", "glm"),
          .m_folds = 10,
          .pmz_learners = c("mean", "glm"),
-         .pmz_folds = 10)
+         .pmz_folds = 10,
+         .pz_learners = c("mean", "glm"),
+         .pz_folds = 10)
 }
