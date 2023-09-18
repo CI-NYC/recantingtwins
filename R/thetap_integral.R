@@ -9,7 +9,7 @@ thetap_integral <- function(data, A, Z, M, fit_or, fit_pz, fit_pm1, ap = 1, as =
         s[[Z]] <- hx[[Z]]$draws
         s[[M]] <- hx[[M]]$draws
 
-        r <- (predict(fit_pz, assign_value(s, A, aj))*
+        r <- (predict(fit_pz, assign_value(s, A, aj)) *
                   predict(fit_pm1, assign_value(s, A, ap))) /
             Reduce(`*`, lapply(c(Z, M), function(x) hx[[x]]$px))
 
@@ -19,7 +19,7 @@ thetap_integral <- function(data, A, Z, M, fit_or, fit_pz, fit_pm1, ap = 1, as =
     Eh
 }
 
-thetap_integral1 <- function(data, A, M, W, fit_or, fit_pm1, ap = 1, as = 0) {
+thetap_integral1 <- function(data, A, M, fit_or, fit_pm1, ap = 1, as = 0) {
     p <- nrow(data) + 1
     hs <- H_factory(data[, M, with = FALSE])
 
@@ -36,7 +36,7 @@ thetap_integral1 <- function(data, A, M, W, fit_or, fit_pm1, ap = 1, as = 0) {
     Eh
 }
 
-thetap_integral2 <- function(data, A, Z, W, fit_or, fit_pz, as = 0, aj) {
+thetap_integral2 <- function(data, A, Z, fit_or, fit_pz, as = 0, aj) {
     p <- nrow(data) + 1
     hs <- H_factory(data[, Z, with = FALSE])
 
