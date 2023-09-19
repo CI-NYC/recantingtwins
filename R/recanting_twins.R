@@ -1,6 +1,6 @@
 recanting_twins <- function(data, W, A, Z, M, Y,
                             outcome_type = c("binomial", "continuous"),
-                            .control = rt_control()) {
+                            .control = .recanting_twins_control()) {
     data <- copy(data)
     setDT(data)
 
