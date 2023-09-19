@@ -1,6 +1,5 @@
 theta3_integral <- function(data, A, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as = 0) {
-    # p <- nrow(data) + 1
-    p <- 10
+    p <- nrow(data) + 1
     hs <- H_factory(data[, c(Z, M), with = FALSE])
 
     Eh <- foreach(i = 1:nrow(data), .options.future = list(seed = TRUE), .combine = c) %dofuture% {
@@ -21,8 +20,7 @@ theta3_integral <- function(data, A, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as =
 }
 
 theta3_integral1 <- function(data, A, M, fit_or, fit_pm2, ap = 1, as = 0) {
-    # p <- nrow(data) + 1
-    p <- 10
+    p <- nrow(data) + 1
     hs <- H_factory(data[, M, with = FALSE])
 
     Eh <- foreach(i = 1:nrow(data), .options.future = list(seed = TRUE), .combine = c) %dofuture% {

@@ -1,3 +1,18 @@
+#' Mediation Analysis With Intermediate Confounding Using Recanting Twins
+#'
+#' @param data \[\code{data.frame}\]\cr
+#' @param W trt \[\code{character}\]\cr
+#' @param A trt \[\code{character}(1)\]\cr
+#' @param Z trt \[\code{character}\]\cr
+#' @param M trt \[\code{character}\]\cr
+#' @param Y trt \[\code{character(1)}\]\cr
+#' @param outcome_type trt \[\code{character}\]\cr
+#' @param .control trt \[\code{list}\]\cr
+#'
+#' @return
+#' @export
+#'
+#' @examples
 recanting_twins <- function(data, W, A, Z, M, Y,
                             outcome_type = c("binomial", "continuous"),
                             .control = .recanting_twins_control()) {
@@ -67,12 +82,30 @@ recanting_twins <- function(data, W, A, Z, M, Y,
     # theta 4 -----------------------------------------------------------------
     est_theta4 <- aipw(data, A, Y, fit_ps$pred, fit_or2$pred, a = 0)
 
-    psi_p1 <- est_theta1$theta - est_theta0$theta
-    psi_p2 <- est_theta_p2$theta - est_theta_p1$theta
-    psi_p3 <- est_theta3_2p$theta - est_theta_p2$theta
-    psi_p4 <- est_theta4$theta - est_theta3$theta
-    psi_wtf <- est_theta1$theta - est_theta_p1$theta + est_theta_p2$theta -
-        est_theta_p2$theta + est_theta3_2p$theta - est_theta3$theta
+    # Output each path with point estimate, EIF, variance, and 95% CI
+    # By definition, theta0 - theta4 (ATE) should equal the below
+    # p1 + p2 + p3 + p4 + intermediate confounding
 
-    psi_p1 + psi_p2 + psi_p3 + psi_p4 + psi_wtf
+                # A -> Y
+    out <- list(p1 = est_theta0$theta - est_theta1$theta,
+                eif_p1 = est_theta0$If - est_theta1$If,
+                # A -> Z -> Y
+                p2 = est_theta_p1$theta - est_theta_p2$theta,
+                eif_p2 = est_theta_p1$If - est_theta_p2$If,
+                # A -> Z -> M -> Y
+                p3 = est_theta_p2$theta - est_theta3_2p$theta,
+                eif_p3 = est_theta_p2$If - est_theta3_2p$If,
+                # A -> M -> Y
+                p4 = est_theta3$theta - est_theta4$theta,
+                eif_p4 = est_theta3$If - est_theta4$If,
+                # Intermediate confounding
+                intermediate_confounding = est_theta1$theta - est_theta_p1$theta + est_theta_p2$theta -
+                    est_theta_p2$theta + est_theta3_2p$theta - est_theta3$theta,
+                eif_intermediate_confounding = est_theta1$If - est_theta_p1$If + est_theta_p2$If -
+                    est_theta_p2$If + est_theta3_2p$If - est_theta3$If,
+                ate = est_theta0$theta - est_theta4$theta,
+                eif_ate = est_theta0$If - est_theta4$If)
+
+    class(out) <- "recantingstwins"
+    out
 }
