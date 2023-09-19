@@ -82,9 +82,7 @@ recanting_twins <- function(data, W, A, Z, M, Y,
     # theta 4 -----------------------------------------------------------------
     est_theta4 <- aipw(data, A, Y, fit_ps$pred, fit_or2$pred, a = 0)
 
-    # Output each path with point estimate, EIF, variance, and 95% CI
-    # By definition, theta0 - theta4 (ATE) should equal the below
-    # p1 + p2 + p3 + p4 + intermediate confounding
+    # estimates ---------------------------------------------------------------
 
                 # A -> Y
     out <- list(p1 = est_theta0$theta - est_theta1$theta,

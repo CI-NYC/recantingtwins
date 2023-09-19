@@ -18,6 +18,7 @@ Remotes:
     nt-williams,
     CI-NYC
 Imports: 
+    cli,
     glue,
     schoolmath
 RoxygenNote: 7.2.3
