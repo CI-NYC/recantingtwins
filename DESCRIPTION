@@ -12,8 +12,7 @@ LazyData: true
 Depends: 
     data.table,
     mlr3superlearner (>= 0.1.0),
-    drcde,
-    doFuture
+    drcde
 Remotes: 
     nt-williams,
     CI-NYC

@@ -1,6 +1,8 @@
 assign_value <- function(data, x, val) {
-    out <- copy(data)
-    out[, (x) := lapply(.SD, function(y) val), .SDcols = x][]
+    data[[x]] <- val
+    data
+    # out <- copy(data)
+    # out[, (x) := lapply(.SD, function(y) val), .SDcols = x][]
 }
 
 H_factory <- function(x) {

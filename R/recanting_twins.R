@@ -104,6 +104,6 @@ recanting_twins <- function(data, W, A, Z, M, Y,
                 ate = est_theta0$theta - est_theta4$theta,
                 eif_ate = est_theta0$If - est_theta4$If)
 
-    class(out) <- "recantingstwins"
+    class(out) <- "recantingtwins"
     out
 }
