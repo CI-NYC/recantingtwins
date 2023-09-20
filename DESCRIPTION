@@ -1,12 +1,21 @@
 Package: recantingtwins
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Mediation Analysis With Intermediate Confounding Using Recanting Twins
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: 
+    c(person(given = "Nicholas",
+             family = "Williams",
+             role = c("aut", "cre", "cph"),
+             email = "ntwilliams.personal@gmail.com", 
+             comment = c(ORCID = "0000-0002-1378-4831")),
+      person(given = "Iván", 
+             family = "Díaz", 
+             email = "ivan.diaz@nyulangone.org",
+             role = c("aut", "cph"),
+             comment = c(ORCID = "0000-0001-9056-2047")))
+Maintainer: Nick Williams <ntwilliams.personal@gmail.com>
+Description: TBD.
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Depends: 
