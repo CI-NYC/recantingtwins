@@ -1,3 +1,5 @@
+# No direct path from A -> Y
+
 g <- function(a) {
     pscore <- .5
     a * pscore + (1 - a) * (1 - pscore)
@@ -9,7 +11,7 @@ pZ <- function(z, a, w) {
 }
 
 pM <- function(m, z, a, w) {
-    prob1 <- plogis(-log(2) + log(12) * z - log(1.4) * w[, "W1"])
+    prob1 <- plogis(-log(2) + log(12) * z + log(5)*a - log(1.4) * w[, "W1"])
     m * prob1 + (1 - m) * (1 - prob1)
 }
 
@@ -28,18 +30,13 @@ gendata <- function(N) {
     data.frame(W1 = w1, A = a, Z = z, M = m, Y = y)
 }
 
-# Create DGMs where there is no effect through each of the paths and
-# then checking that certain components are 0
-
 tmp <- gendata(1000)
 
-# library(recantingtwins)
+library(recantingtwins)
 
 params <- .recanting_twins_control(.pmz_learners = c("nnet", "xgboost"),
                                    .pz_learners = c("nnet", "xgboost"),
                                    .pm1_learners = c("nnet", "xgboost"),
                                    .pm2_learners = c("nnet", "xgboost"))
 
-test <- recanting_twins(tmp, "W1", "A", "Z", "M", "Y", "binomial", .control = params)
-print.recantingtwins(test)
-
+recanting_twins(tmp, "W1", "A", "Z", "M", "Y", "binomial", .control = params)
