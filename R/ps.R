@@ -1,4 +1,4 @@
-ps <- function(data, A, W, .control) {
+ps <- function(data, W, A, .control) {
     out <- matrix(nrow = nrow(data), ncol = 2)
     colnames(out) <- c("P(0|W)", "P(1|W)")
     fit <- mlr3superlearner(data = data[, c(A, W), with = FALSE],
