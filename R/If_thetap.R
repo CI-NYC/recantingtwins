@@ -11,7 +11,9 @@ If_thetap <- function(data, A, Y, ps, or, pz, pm1, pm2, Eh, Eh1, Eh2, ap = 1, as
     `P(M|a',W)` <- pm1[, gl("P(M|{ap},W)")]
     `P(M|a*,Z,W)` <- pm2[, gl("P(M|{as},Z,W)")]
 
-    uc_If <- (`I(a*)` / `P(a*|W)`)*(`P(Z|aj,W)` / `P(Z|a*,W)`)*(`P(M|a',W)` / `P(M|a*,Z,W)`)*(data[[Y]] - `E(Y|a*,Z,M,W)`) +
+    uc_If <- (`I(a*)` / `P(a*|W)`)*(`P(Z|aj,W)` / `P(Z|a*,W)`)*
+        (`P(M|a',W)` / `P(M|a*,Z,W)`)*
+        (data[[Y]] - `E(Y|a*,Z,M,W)`) +
         (`I(a_j)` / `P(a_j|W)`)*Eh1 - (`I(a_j)` / `P(a_j|W)`)*Eh +
         (`I(a')` / `P(a'|W)`)*Eh2 - (`I(a')` / `P(a'|W)`)*Eh +
         Eh

@@ -6,7 +6,7 @@ thetap_integral <- function(data, A, Z, M, fit_or, fit_pz, fit_pm1, ap = 1, as =
     tmp[, .recantingtwins_id := 1:.N]
     tmp <- tmp[rep(1:.N, p)]
 
-    hx <- draw_H(hs, p)
+    hx <- draw_H(hs, nrow(tmp))
     tmp[[Z]] <- hx[[Z]]$draws
     tmp[[M]] <- hx[[M]]$draws
 
@@ -25,7 +25,7 @@ thetap_integral1 <- function(data, A, M, fit_or, fit_pm1, ap = 1, as = 0) {
     tmp[, .recantingtwins_id := 1:.N]
     tmp <- tmp[rep(1:.N, p)]
 
-    hx <- draw_H(hs, p)
+    hx <- draw_H(hs, nrow(tmp))
     tmp[[M]] <- hx[[M]]$draws
 
     sapply(split(predict(fit_or, assign_value(tmp, A, as)) *
@@ -41,7 +41,7 @@ thetap_integral2 <- function(data, A, Z, fit_or, fit_pz, as = 0, aj) {
     tmp[, .recantingtwins_id := 1:.N]
     tmp <- tmp[rep(1:.N, p)]
 
-    hx <- draw_H(hs, p)
+    hx <- draw_H(hs, nrow(tmp))
     tmp[[Z]] <- hx[[Z]]$draws
 
     sapply(split(predict(fit_or, assign_value(tmp, A, as)) *

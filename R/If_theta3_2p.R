@@ -8,7 +8,7 @@ If_theta3_2p <- function(data, A, Y, ps, or, pz, pm2, Eh, Eh1, Eh2, ap = 1, as =
     `P(Z|a',W)` <- pz[, gl("P(Z|{ap},W)")]
     `P(M|a*,Z,W)` <- pm2[, gl("P(M|{as},Z,W)")]
 
-    uc_If <- `I(a*)` / (`P(M|a*,Z,W)`*`P(a*|W)`)*(data[[Y]] - Eh2[, "E_h2(z')"]) +
+    uc_If <- `I(a*)` / (`P(M|a*,Z,W)`*`P(a*|W)`)*(data[[Y]] - `E(Y|a*,Z,M,W)`)*Eh2[, "E_h2(z')"] +
         (`I(a*)` / `P(a*|W)`)*Eh1[, "E_h1(m,z')"] -
         (`I(a*)` / `P(a*|W)`)*Eh +
         (`I(a')` / `P(a'|W)`)*(`P(Z|a*,W)` / `P(Z|a',W)`)*Eh2[, "E_h2(z)"] -

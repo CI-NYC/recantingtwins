@@ -6,7 +6,7 @@ theta3_integral <- function(data, A, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as =
     tmp[, .recantingtwins_id := 1:.N]
     tmp <- tmp[rep(1:.N, p)]
 
-    hx <- draw_H(hs, p)
+    hx <- draw_H(hs, nrow(tmp))
     tmp[[Z]] <- hx[[Z]]$draws
     tmp[[M]] <- hx[[M]]$draws
 
@@ -26,7 +26,7 @@ theta3_integral1 <- function(data, A, M, fit_or, fit_pm2, ap = 1, as = 0) {
     tmp[, .recantingtwins_id := 1:.N]
     tmp <- tmp[rep(1:.N, p)]
 
-    hx <- draw_H(hs, p)
+    hx <- draw_H(hs, nrow(tmp))
     tmp[[M]] <- hx[[M]]$draws
 
     r <- predict(fit_pm2, assign_value(tmp, A, ap)) / hx[[M]]$px
