@@ -83,7 +83,6 @@ recanting_twins <- function(data, W, A, Z, M, Y,
     est_theta4 <- aipw(data, A, Y, fit_ps$pred, fit_or2$pred, a = 0)
 
     # estimates ---------------------------------------------------------------
-
                 # A -> Y
     out <- list(p1 = est_theta0$theta - est_theta1$theta,
                 eif_p1 = est_theta0$If - est_theta1$If,

@@ -7,9 +7,9 @@ theta2p_integral <- function(data, A, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as 
     tmp <- tmp[rep(1:.N, p)]
 
     # Z' and M
-    hx1 <- draw_H(hs, p)
+    hx1 <- draw_H(hs, nrow(tmp))
     # Z
-    hx2 <- draw_H(hs[Z], p)
+    hx2 <- draw_H(hs[Z], nrow(tmp))
     tmp[[Z]] <- hx1[[Z]]$draws
     tmp[[M]] <- hx1[[M]]$draws
 
@@ -38,7 +38,7 @@ theta2p_integral1 <- function(data, A, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as
     tmp <- tmp[rep(1:.N, p)]
 
     # Z' and M
-    hx <- draw_H(hs, p)
+    hx <- draw_H(hs, nrow(tmp))
     tmp[[M]] <- hx[[M]]$draws
 
     `E(Y|a*,Z=z,M,W)` <- predict(fit_or, assign_value(tmp, A, as))
@@ -72,7 +72,7 @@ theta2p_integral2 <- function(data, A, Z, fit_or, fit_pz, fit_pm2, ap = 1, as = 
     tmp <- tmp[rep(1:.N, p)]
 
     # Z'
-    hx <- draw_H(hs, p)
+    hx <- draw_H(hs, nrow(tmp))
     tmp[[Z]] <- hx[[Z]]$draws
 
     `f(M|a',Z',W)` <- predict(fit_pm2, assign_value(tmp, A, ap))
