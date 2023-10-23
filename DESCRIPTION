@@ -21,7 +21,9 @@ LazyData: true
 Depends: 
     data.table,
     mlr3superlearner (>= 0.1.0),
-    drcde
+    drcde,
+    mltools,
+    nnet
 Remotes: 
     nt-williams,
     CI-NYC
