@@ -1,4 +1,4 @@
-or_disc <- function(data, W, A, Z, M, Y, outcome_type, .control) {
+or <- function(data, W, A, Z, M, Y, outcome_type, .control) {
     out <- matrix(nrow = nrow(data), ncol = 2)
     colnames(out) <- c("E(Y|0,Z,M,W)", "E(Y|1,Z,M,W)")
     
@@ -19,7 +19,7 @@ or_disc <- function(data, W, A, Z, M, Y, outcome_type, .control) {
          fit = fit)
       }
       
-or2_disc <- function(data, W, A, Y, outcome_type, .control) {
+or2 <- function(data, W, A, Y, outcome_type, .control) {
     out <- matrix(nrow = nrow(data), ncol = 2)
     colnames(out) <- c("E(Y|0,W)", "E(Y|1,W)")
 
