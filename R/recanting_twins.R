@@ -22,11 +22,11 @@ recanting_twins <- function(data, W, A, Z, M, Y,
     outcome_type <- match.arg(outcome_type)
 
     # Fit the propensity score: P(A | W)
-    fit_ps <- ps(data, W, A, .control)
+    fit_ps <- ps_disc(data, W, A, .control)
     # Fit the outcome regression: E(Y|A, Z, M, W)
-    fit_or <- or(data, W, A, Z, M, Y, outcome_type, .control)
+    fit_or <- or_disc(data, W, A, Z, M, Y, outcome_type, .control)
     # Fit the outcome regression: E(Y|A, W)
-    fit_or2 <- or2(data, W, A, Y, outcome_type, .control)
+    fit_or2 <- or2_disc(data, W, A, Y, outcome_type, .control)
 
     # theta 0 -----------------------------------------------------------------
     est_theta0 <- aipw(data, A, Y, fit_ps$pred, fit_or2$pred, a = 1)
@@ -39,7 +39,7 @@ recanting_twins <- function(data, W, A, Z, M, Y,
     # Fit the joint density of M,Z: P(M,Z|a,W)
     fit_pmz <- pmz_disc(data, A, W, M, Z, fit_pz$pred, fit_pm2$pred, .control)
     # Estimate E_h(E(Y|a*, Z, M, W)*P(M,Z|a',W))
-    Eh_theta1 <- theta1_integral_disc(data, A, Z, M, fit_or$fit, fit_pz$fit, fit_pm2$fit, ap = 1, as = 0)
+    Eh_theta1 <- theta1_integral_disc(data, A, W, Z, M, fit_or$fit, fit_pz$fit, fit_pm2$fit, ap = 1, as = 0)
     # Estimate the EIF for theta 1
     est_theta1 <- If_theta1(data, A, Y, fit_ps$pred, fit_or$pred, fit_pmz$pred, Eh_theta1, ap = 1, as = 0)
 
