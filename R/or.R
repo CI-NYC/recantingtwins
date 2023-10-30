@@ -8,15 +8,15 @@ or_disc <- function(data, W, A, Z, M, Y, outcome_type, .control) {
                             outcome_type = outcome_type,
                             folds = .control$.m_folds)
     
-    data_temp = assign_value(data, A, 0)
+    data_temp <- assign_value(data, A, 0)
     out[, "E(Y|0,Z,M,W)"] <- predict(fit, data_temp[,c(A, W, Z, M), with = F], discrete = F)
     
-    data_temp = assign_value(data, A, 1)
+    data_temp <- assign_value(data, A, 1)
     out[, "E(Y|1,Z,M,W)"] <- predict(fit, data_temp[,c(A, W, Z, M), with = F], discrete = F)
     
     #browser()
     list(pred = out,
-        fit = fit)
+         fit = fit)
       }
       
 or2_disc <- function(data, W, A, Y, outcome_type, .control) {
@@ -29,13 +29,13 @@ or2_disc <- function(data, W, A, Y, outcome_type, .control) {
                             outcome_type = outcome_type,
                             folds = .control$.m_folds)
 
-    data_temp = assign_value(data, A, 0)
+    data_temp <- assign_value(data, A, 0)
     out[, "E(Y|0,W)"] <- predict(fit, data_temp[,c(A, W), with = F], discrete = F)
 
-    data_temp = assign_value(data, A, 1)
+    data_temp <- assign_value(data, A, 1)
     out[, "E(Y|1,W)"] <- predict(fit, data_temp[,c(A, W), with = F], discrete = F)
 
     #browser()
     list(pred = out,
-        fit = fit)
+         fit = fit)
 }
