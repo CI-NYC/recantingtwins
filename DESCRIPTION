@@ -22,8 +22,7 @@ Depends:
     data.table,
     mlr3superlearner (>= 0.1.0),
     drcde,
-    mltools,
-    nnet
+    mltools
 Remotes: 
     nt-williams,
     CI-NYC
