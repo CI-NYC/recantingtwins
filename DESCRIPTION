@@ -16,7 +16,7 @@ Authors@R:
       person(given = "Richard",
              family = "Liu",
              email = "liulidaily@gmail.com",
-             role = c("aut"))
+             role = c("aut")))
 Maintainer: Nick Williams <ntwilliams.personal@gmail.com>
 Description: TBD.
 License: GPL (>= 3)

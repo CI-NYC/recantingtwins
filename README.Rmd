@@ -71,42 +71,37 @@ tmp <- gendata(1000)
 library(recantingtwins)
 library(mlr3extralearners)
 
-params <- .recanting_twins_control(.pmz_learners = c("nnet", "xgboost"),
-                                   .pz_learners = c("nnet", "xgboost"),
-                                   .pm1_learners = c("nnet", "xgboost"),
-                                   .pm2_learners = c("nnet", "xgboost"))
-
-recanting_twins(tmp, "W1", "A", "Z", "M", "Y", "binomial", .control = params)
+recanting_twins(tmp, "W1", "A", "Z", "M", "Y", "binomial")
 #> ══ Results `recantings_twins()` ═══════════════════════════════════════════════════
 #> 
 #> ── Average Treatment Effect 
-#>       Estimate: 0.2918
+#>       Estimate: 0.2919
 #>     Std. error: 0.0292
 #>         95% CI: (0.2346, 0.3491)
 #> 
 #> ── Path: A -> Y 
-#>       Estimate: 0.0181
-#>     Std. error: 0.0262
-#>         95% CI: (-0.0334, 0.0695)
+#>       Estimate: 0.0149
+#>     Std. error: 0.0258
+#>         95% CI: (-0.0356, 0.0655)
 #> 
 #> ── Path: A -> Z -> Y 
-#>       Estimate: 0.1892
-#>     Std. error: 0.03
-#>         95% CI: (0.1304, 0.248)
+#>       Estimate: 0.1823
+#>     Std. error: 0.0257
+#>         95% CI: (0.132, 0.2327)
 #> 
 #> ── Path: A -> Z -> M -> Y 
-#>       Estimate: 0.1189
-#>     Std. error: 0.0223
-#>         95% CI: (0.0752, 0.1626)
+#>       Estimate: 0.1213
+#>     Std. error: 0.0178
+#>         95% CI: (0.0864, 0.1561)
 #> 
 #> ── Path: A -> M -> Y 
-#>       Estimate: -0.0232
-#>     Std. error: 0.0188
-#>         95% CI: (-0.06, 0.0136)
+#>       Estimate: -0.0153
+#>     Std. error: 0.0156
+#>         95% CI: (-0.0458, 0.0152)
 #> 
 #> ── Intermediate Confounding 
-#>       Estimate: -0.0111
-#>     Std. error: 0.0086
-#>         95% CI: (-0.028, 0.0058)
+#>       Estimate: -0.0114
+#>     Std. error: 0.0049
+#>         95% CI: (-0.0209, -0.0018)
 ```
 
