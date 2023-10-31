@@ -1,87 +1,138 @@
-theta2p_integral <- function(data, A, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as = 0) {
-    p <- nrow(data) + 1
-    hs <- H_factory(data[, c(Z, M), with = FALSE])
-
-    tmp <- copy(data)
-    tmp[, .recantingtwins_id := 1:.N]
-    tmp <- tmp[rep(1:.N, p)]
-
-    # Z' and M
-    hx1 <- draw_H(hs, nrow(tmp))
-    # Z
-    hx2 <- draw_H(hs[Z], nrow(tmp))
-    tmp[[Z]] <- hx1[[Z]]$draws
-    tmp[[M]] <- hx1[[M]]$draws
-
-    `f(M|a',Z',W)` <- predict(fit_pm2, assign_value(tmp, A, ap))
-    `f(Z'|a*,W)` <- predict(fit_pz, assign_value(tmp, A, as))
-
-    tmp[[Z]] <- hx2[[Z]]$draws
-    `f(Z|a*,W)` <- predict(fit_pz, assign_value(tmp, A, as))
-
-    `E(Y|a*,Z,M,W)` <- predict(fit_or, assign_value(tmp, A, as))
-    `h(Z, Z', M)` <- Reduce(`*`, lapply(c(Z, M), function(x) hx1[[x]]$px)) * hx2[[Z]]$px
-
-    r <- (`f(Z|a*,W)` * `f(M|a',Z',W)` * `f(Z'|a*,W)`) / `h(Z, Z', M)`
-    sapply(split(`E(Y|a*,Z,M,W)` * r, tmp$.recantingtwins_id), mean)
+theta2p_integral <- function(data, A, W, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as = 0) {
+  # fit_pm2 <- ap
+  # fit_or <- as
+  # fit_pz <- as
+  num_class_M <- nrow(unique(data[, c(M), with = FALSE]))
+  num_class_Z <- nrow(unique(data[, c(Z), with = FALSE]))
+  
+  pzp_pred <- matrix(0, nrow(data), num_class_Z)
+  data_temp_As <- assign_value(data, A, as)
+  
+  pzp_pred <- predict(fit_pz, data_temp_As[,c(A, W), with = F], discrete = F)
+  pz_pred <- predict(fit_pz, data_temp_As[,c(A, W), with = F], discrete = F)
+  
+  res <- rep(0, nrow(data))
+  for(zp in 0:(num_class_Z - 1)){
+    pzp_pred_temp <- as.vector(pzp_pred[,zp + 1])
+    data_temp_ApZp <- assign_value(assign_value(data, A, ap), Z, zp)
+    
+    pm_pred <- predict(fit_pm2, data_temp_ApZp[,c(A, W, Z), with = F], discrete = F)
+    
+    for(z in 0:(num_class_Z - 1)){
+      pz_pred_temp <- as.vector(pz_pred[,z + 1])
+      for(m in 0:(num_class_M - 1)){
+        pm_pred_temp <- as.vector(pm_pred[,m + 1])
+        
+        data_temp <- assign_value(assign_value(data_temp_As, Z, z), M, m)
+        E_pred_temp <- predict(fit_or, data_temp[,c(A, W, Z, M), with = F], discrete = F)
+        res <- rbind(res, pm_pred_temp * pz_pred_temp * pzp_pred_temp * E_pred_temp)
+      }
+    }
+  }
+  
+  res <- apply(res, 2, sum)
+  return(res)
 }
 
-theta2p_integral1 <- function(data, A, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as = 0) {
-    p <- nrow(data) + 1
-    hs <- H_factory(data[, c(Z, M), with = FALSE])
-
-    out <- matrix(nrow = nrow(data), ncol = 2)
-    colnames(out) <- c("E_h1(m,z')", "E_h1(m,z)")
-
-    tmp <- copy(data)
-    tmp[, .recantingtwins_id := 1:.N]
-    tmp <- tmp[rep(1:.N, p)]
-
-    # Z' and M
-    hx <- draw_H(hs, nrow(tmp))
-    tmp[[M]] <- hx[[M]]$draws
-
-    `E(Y|a*,Z=z,M,W)` <- predict(fit_or, assign_value(tmp, A, as))
-    `f(M|a',Z=z,W)` <- predict(fit_pm2, assign_value(tmp, A, ap))
-
-    tmp[[Z]] <- hx[[Z]]$draws
-
-    `f(M|a',Z',W)` <- predict(fit_pm2, assign_value(tmp, A, ap))
-    `f(Z'|a*,W)` <- predict(fit_pz, assign_value(tmp, A, as))
-    `E(Y|a*,Z',M,W)` <- predict(fit_or, assign_value(tmp, A, as))
-    `h_1(M, Z')` <- Reduce(`*`, lapply(c(Z, M), function(x) hx[[x]]$px))
-
-    r <- (`f(M|a',Z',W)` * `f(Z'|a*,W)`) / `h_1(M, Z')`
-    out[, "E_h1(m,z')"] <- sapply(split(`E(Y|a*,Z=z,M,W)` * r, tmp$.recantingtwins_id), mean)
-
-    r <- (`f(M|a',Z=z,W)` * `f(Z'|a*,W)`) / `h_1(M, Z')`
-    out[, "E_h1(m,z)"] <- sapply(split(`E(Y|a*,Z',M,W)` * r, tmp$.recantingtwins_id), mean)
-
-    out
+theta2p_integral1 <- function(data, A, W, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as = 0) {
+  # fit_or <- as
+  # fit_pz <- as
+  # fit_pm2 <- ap
+  out <- matrix(nrow = nrow(data), ncol = 2)
+  colnames(out) <- c("E_h1(m,z')", "E_h1(m,z)")
+  
+  num_class_M <- nrow(unique(data[, c(M), with = FALSE]))
+  num_class_Z <- nrow(unique(data[, c(Z), with = FALSE]))
+  
+  pzp_pred <- matrix(0, nrow(data), num_class_Z)
+  data_temp_As <- assign_value(data, A, as)
+  
+  pzp_pred <- predict(fit_pz, data_temp_As[,c(A, W), with = F], discrete = F)
+  
+  res <- rep(0, nrow(data))
+  for(zp in 0:(num_class_Z - 1)){
+    pzp_pred_temp <- as.vector(pzp_pred[,zp+1])
+    data_temp_Ap <- assign_value(data, A, ap)
+    
+    pm_pred <- predict(fit_pm2, data_temp_Ap[,c(A, W, Z), with = F], discrete = F)
+    
+    for(m in 0:(num_class_M - 1)){
+      pm_pred_temp <- as.vector(pm_pred[,m + 1])
+      
+      data_temp <- assign_value(assign_value(data_temp_As, Z, zp), M, m)
+      E_pred_temp <- predict(fit_or, data_temp[,c(A, W, Z, M), with = F], discrete = F)
+      res <- rbind(res, pm_pred_temp * pzp_pred_temp * E_pred_temp)
+    }
+  }
+  
+  res <- apply(res, 2, sum)
+  
+  res2 <- rep(0, nrow(data))
+  for(zp in 0:(num_class_Z - 1)){
+    pzp_pred_temp <- as.vector(pzp_pred[,zp+1])
+    
+    data_temp_ApZp <- assign_value(assign_value(data, A, ap), Z, zp)
+    
+    pm_pred <- predict(fit_pm2, data_temp_ApZp[,c(A, W, Z), with = F], discrete = F)
+    
+    for(m in 0:(num_class_M - 1)){
+      pm_pred_temp <- as.vector(pm_pred[,m + 1])
+      
+      data_temp <- assign_value(data_temp_As, M, m)
+      E_pred_temp <- predict(fit_or, data_temp[,c(A, W, Z, M), with = F], discrete = F)
+      res2 <- rbind(res2, pm_pred_temp * pzp_pred_temp * E_pred_temp)
+    }
+  }
+  
+  res2 <- apply(res2, 2, sum)
+  out[, "E_h1(m,z')"] <- res2
+  out[, "E_h1(m,z)"] <- res
+  return(out)
 }
 
-theta2p_integral2 <- function(data, A, Z, fit_or, fit_pz, fit_pm2, ap = 1, as = 0) {
-    p <- nrow(data) + 1
-    hs <- H_factory(data[, Z, with = FALSE])
-
-    out <- matrix(nrow = nrow(data), ncol = 2)
-    colnames(out) <- c("E_h2(z')", "E_h2(z)")
-
-    tmp <- copy(data)
-    tmp[, .recantingtwins_id := 1:.N]
-    tmp <- tmp[rep(1:.N, p)]
-
-    # Z'
-    hx <- draw_H(hs, nrow(tmp))
-    tmp[[Z]] <- hx[[Z]]$draws
-
-    `f(M|a',Z',W)` <- predict(fit_pm2, assign_value(tmp, A, ap))
-    `f(Z'|a*,W)` <- predict(fit_pz, assign_value(tmp, A, as))
-    `E(Y|a*,Z',M,W)` <- predict(fit_or, assign_value(tmp, A, as))
-
-    r <- `f(Z'|a*,W)` / hx[[Z]]$px
-
-    out[, "E_h2(z')"] <- sapply(split(`f(M|a',Z',W)` * r, tmp$.recantingtwins_id), mean)
-    out[, "E_h2(z)"] <- sapply(split(`E(Y|a*,Z',M,W)` * r, tmp$.recantingtwins_id), mean)
-    out
+theta2p_integral2 <- function(data, A, W, Z, M, fit_or, fit_pz, fit_pm2, ap = 1, as = 0) {
+  # fit_or <- as
+  # fit_pz <- as
+  # fit_pm2 <- ap
+  out <- matrix(nrow = nrow(data), ncol = 2)
+  colnames(out) <- c("E_h2(z')", "E_h2(z)")
+  
+  num_class_Z <- nrow(unique(data[, c(Z), with = FALSE]))
+  
+  pzp_pred <- matrix(0, nrow(data), num_class_Z)
+  data_temp_As <- assign_value(data, A, as)
+  
+  pzp_pred <- predict(fit_pz, data_temp_As[,c(A, W), with = F], discrete = F)
+  
+  res <- rep(0, nrow(data))
+  for(zp in 0:(num_class_Z - 1)){
+    pzp_pred_temp <- as.vector(pzp_pred[,zp + 1])
+    
+    data_temp_ApZp <- assign_value(assign_value(data, A, ap), Z, zp)
+    
+    pm_pred <- predict(fit_pm2, data_temp_ApZp[,c(A, W, Z), with = F], discrete = F)
+    
+    M_data <- as.vector(as.matrix(data[,c(M), with = F]))
+    mask_M <- one_hot(as.data.table(as.factor(M_data)))
+    
+    pm_pred_temp <- rowSums(pm_pred * mask_M)
+    
+    res <- rbind(res, pm_pred_temp * pzp_pred_temp)
+  }
+  
+  res <- apply(res, 2, sum)
+  
+  res2 <- rep(0, nrow(data))
+  for(zp in 0:(num_class_Z - 1)){
+    pzp_pred_temp <- as.vector(pzp_pred[,zp + 1])
+    
+    data_temp <- assign_value(data_temp_As, Z, zp)
+    E_pred_temp <- predict(fit_or, data_temp[,c(A, W, Z, M), with = F], discrete = F)
+    res2 <- rbind(res2, pzp_pred_temp * E_pred_temp)
+  }
+  
+  res2 <- apply(res2, 2, sum)
+  out[, "E_h2(z')"] <- res
+  out[, "E_h2(z)"] <- res2
+  return(out)
 }

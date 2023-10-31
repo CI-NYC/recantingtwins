@@ -6,10 +6,10 @@ ps <- function(data, W, A, .control) {
                             library = .control$.g_learners,
                             outcome_type = "binomial",
                             folds = .control$.g_folds)
-
-    out[, "P(1|W)"] <- predict(fit, data)
+    
+    out[, "P(1|W)"] <- predict(fit, data[,c(W), with = F], discrete = F)
     out[, "P(0|W)"] <- 1 - out[, "P(1|W)"]
-
+    
     list(pred = out,
-         fit = fit)
+        fit = fit)
 }

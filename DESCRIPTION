@@ -12,7 +12,11 @@ Authors@R:
              family = "Díaz", 
              email = "ivan.diaz@nyulangone.org",
              role = c("aut", "cph"),
-             comment = c(ORCID = "0000-0001-9056-2047")))
+             comment = c(ORCID = "0000-0001-9056-2047")),
+      person(given = "Richard",
+             family = "Liu",
+             email = "liulidaily@gmail.com",
+             role = c("aut"))
 Maintainer: Nick Williams <ntwilliams.personal@gmail.com>
 Description: TBD.
 License: GPL (>= 3)
@@ -21,7 +25,8 @@ LazyData: true
 Depends: 
     data.table,
     mlr3superlearner (>= 0.1.0),
-    drcde
+    drcde,
+    mltools
 Remotes: 
     nt-williams,
     CI-NYC
