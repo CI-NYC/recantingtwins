@@ -18,7 +18,7 @@ You can install the development version of recantingtwins from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("CI-NYC/recantingtwins@categoricalZM2")
+devtools::install_github("CI-NYC/recantingtwins")
 ```
 
 ## Example
