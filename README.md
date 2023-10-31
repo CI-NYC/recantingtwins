@@ -62,6 +62,7 @@ tmp <- gendata(1000)
 library(recantingtwins)
 library(mlr3extralearners)
 
+tmp = data.frame(apply(tmp, 2, as.numeric))
 recanting_twins(tmp, "W1", "A", "Z", "M", "Y", "binomial")
 #> ══ Results `recantings_twins()` ═══════════════════════════════════════════════════
 #> 
