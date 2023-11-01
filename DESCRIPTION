@@ -25,7 +25,6 @@ LazyData: true
 Depends: 
     data.table,
     mlr3superlearner (>= 0.1.0),
-    drcde,
     mltools
 Remotes: 
     nt-williams,
